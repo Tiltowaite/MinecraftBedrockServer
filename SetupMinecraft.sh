@@ -9,9 +9,15 @@
 #
 # GitHub Repository: https://github.com/TheRemote/MinecraftBedrockServer
 
+FORK_REPO=Tiltowaite
+CONTENT_URI=https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer
 echo "Minecraft Bedrock Server installation script by James A. Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
+if [ -z ${my_variable+x} ]; then
+  echo "Running from project fork https://github.com/$FORK_REPO/MinecraftBedrockServer"
+  CONTENT_URI=https://raw.githubusercontent.com/$FORK_REPO/MinecraftBedrockServer
+fi
 
 # Randomizer for user agent
 RandNum=$(echo $((1 + $RANDOM % 5000)))
@@ -316,6 +322,10 @@ fi
 echo "Enter a short one word label for a new or existing server (don't use minecraftbe)..."
 echo "It will be used in the folder name and service name..."
 
+echo "Existing servers:"
+ls  $DirName/minecraftbe
+echo ""
+
 read_with_prompt ServerName "Server Label"
 
 if [[ "$ServerName" == *"minecraftbe"* ]]; then
@@ -323,11 +333,27 @@ if [[ "$ServerName" == *"minecraftbe"* ]]; then
   exit 1
 fi
 
-echo "Enter server IPV4 port (default 19132): "
-read_with_prompt PortIPV4 "Server IPV4 Port" 19132
+defaultPortIPV4=19132
+defaultPortIBV6=19133
 
-echo "Enter server IPV6 port (default 19133): "
-read_with_prompt PortIPV6 "Server IPV6 Port" 19133
+echo $ServerName
+if [ -d "$ServerName" ]; then
+  echo "Reading values from existing $ServerName"
+  cd $DirName
+  cd minecraftbe
+  cd $ServerName
+  if [ -f server.properties ]; then
+    defaultPortIPV4=$(cat server.properties | sed -n 's/^server-port=\([0-9]*\).*$/\1/pg')
+    defaultPortIPV6=$(cat server.properties | sed -n 's/^server-portv6=\([0-9]*\).*$/\1/pg')
+  fi
+fi
+
+
+echo "Enter server IPV4 port (default $defaultPortIPV4): "
+read_with_prompt PortIPV4 "Server IPV4 Port" $defaultPortIPV4
+
+echo "Enter server IPV6 port (default $defaultPortIPV6): "
+read_with_prompt PortIPV6 "Server IPV6 Port" $defaultPortIPV6
 
 if [ -d "$ServerName" ]; then
   echo "Directory minecraftbe/$ServerName already exists!  Updating scripts and configuring service ..."
