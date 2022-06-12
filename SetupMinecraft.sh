@@ -16,7 +16,7 @@ echo "Minecraft Bedrock Server installation script by James A. Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
 if [ "$GITHUB_REPO" != "TheRemote" ]; then
-  echo "Running from fork project https://github.com/$GETHUB_REPO/MinecraftBedrockServer"
+  echo "Running from fork project https://github.com/$GITHUB_REPO/MinecraftBedrockServer"
 fi
 CONTENT_URI=https://raw.githubusercontent.com/$GITHUB_REPO/MinecraftBedrockServer
 
