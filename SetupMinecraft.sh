@@ -9,9 +9,15 @@
 #
 # GitHub Repository: https://github.com/TheRemote/MinecraftBedrockServer
 
+FORK_REPO=Tiltowaite
+CONTENT_URI=https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer
 echo "Minecraft Bedrock Server installation script by James A. Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
+if [ -z ${my_variable+x} ]; then
+  echo "Running from project fork https://github.com/$FORK_REPO/MinecraftBedrockServer"
+  CONTENT_URI=https://raw.githubusercontent.com/$FORK_REPO/MinecraftBedrockServer
+fi
 
 # Randomizer for user agent
 RandNum=$(echo $((1 + $RANDOM % 5000)))
